@@ -2,6 +2,25 @@
 
 Depencency injection framework for Kotlin developers.
 
+[![](https://jitpack.io/v/vitoksmile/KotDil.svg)](https://jitpack.io/#vitoksmile/KotDil)
+
+## Add to your project
+The first step, add JitPack repository to your root build.gradle file (not module build.gradle file):
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+The second step, add the library to your module build.gradle:
+```
+dependencies {
+	implementation 'com.github.vitoksmile:KotDil:1.0.0'
+}
+```
+
 ## How to use KotDil?
 The first, create `BuilderContext` by the next code:
 ```
