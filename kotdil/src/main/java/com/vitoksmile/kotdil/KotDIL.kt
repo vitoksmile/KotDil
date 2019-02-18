@@ -7,6 +7,6 @@ fun kotDil(logging: Boolean = false, builder: BuilderContext.() -> Unit) {
     builderContext.builder()
 }
 
-inline fun <reified T : Any> inject() = lazy {
-    builderContext.get<T>(T::class.java.name)
+inline fun <reified T : Any> inject(name: String? = null) = lazy {
+    builderContext.get<T>(name, T::class.java.name)
 }

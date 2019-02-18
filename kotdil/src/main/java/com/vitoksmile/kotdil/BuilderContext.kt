@@ -2,6 +2,11 @@ package com.vitoksmile.kotdil
 
 class BuilderContext {
 
+    private companion object {
+
+        private const val DELIMITER_NAME = "["
+    }
+
     /**
      * Store lazy providers to create one instance
      */
@@ -24,22 +29,31 @@ class BuilderContext {
 
     /**
      * Add provider to create one instance of T
+     *
+     * @param name Name of provider
+     * @param provider T-provider
      */
-    fun <T : Any> singleton(provider: () -> T) {
-        singletonsLazy[getKey(provider)] = provider
+    fun <T : Any> singleton(name: String? = null, provider: () -> T) {
+        singletonsLazy[getKey(name, provider)] = provider
     }
 
     /**
      * Add provider to create instance of T every time in getting
+     *
+     * @param name Name of provider
+     * @param provider T-provider
      */
-    fun <T : Any> factory(provider: () -> T) {
-        factories[getKey(provider)] = provider
+    fun <T : Any> factory(name: String? = null, provider: () -> T) {
+        factories[getKey(name, provider)] = provider
     }
 
     /**
      * @return instance of T by [key]
      */
-    operator fun <T : Any> get(key: String): T {
+    operator fun <T : Any> get(name: String? = null, key: String): T {
+        @Suppress("NAME_SHADOWING")
+        val key = getKey(name, key)
+
         return when {
             // Create instance and store it to another map
             singletonsLazy.containsKey(key) -> {
@@ -47,7 +61,7 @@ class BuilderContext {
                     singletons[key] = (singletonsLazy[key] as Function0<T>)()
                 }
                 singletonsLazy.remove(key)
-                get(key)
+                get(name, key)
             }
 
             // Return created early instance
@@ -67,8 +81,15 @@ class BuilderContext {
      *
      * @return key for provider
      */
-    private fun <T : Any> getKey(provider: () -> T): String {
-        return provider.toString().substringAfter("<").substringBefore(">")
+    private fun <T : Any> getKey(name: String? = null, provider: () -> T): String {
+        return getKey(name, provider.toString().substringAfter("<").substringBefore(">"))
+    }
+
+    /**
+     * Generate key based on [name] and base [key]
+     */
+    private fun getKey(name: String? = null, key: String): String {
+        return key + (name?.let { "$DELIMITER_NAME$it" } ?: "")
     }
 
     /**
@@ -79,7 +100,19 @@ class BuilderContext {
 
         val start = System.currentTimeMillis()
         val value = block()
-        println("Instance for '$key' was created after ${System.currentTimeMillis() - start} ms")
+        val name = getNameWithoutKey(key)?.let { "($it)" } ?: ""
+        println("Instance for '${getKeyWithoutName(key)}' $name was created after ${System.currentTimeMillis() - start} ms")
         return value
     }
+
+    /**
+     * Key transformer for logging
+     */
+    private fun getKeyWithoutName(key: String) = key.substringBefore(DELIMITER_NAME)
+
+    /**
+     * Key transformer for logging
+     */
+    private fun getNameWithoutKey(key: String): String? = if (key.indexOf(DELIMITER_NAME) >= 0)
+        key.substringAfter(DELIMITER_NAME) else null
 }
