@@ -12,6 +12,11 @@ class BuilderContext {
     }
 
     /**
+     * Hold builder context for module
+     */
+    class Module(internal val builderContext: BuilderContext)
+
+    /**
      * Hold providers
      */
     private val providers = mutableMapOf<String, Provider>()
@@ -20,6 +25,15 @@ class BuilderContext {
      * Flag is enabled print logs to console
      */
     var isLogging: Boolean = false
+
+    /**
+     * Add modules
+     */
+    fun modules(vararg modules: Module) {
+        modules.forEach { module ->
+            providers.putAll(module.builderContext.providers)
+        }
+    }
 
     /**
      * Add provider to create instance of T every time in getting
