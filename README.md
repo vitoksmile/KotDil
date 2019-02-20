@@ -17,7 +17,7 @@ allprojects {
 The second step, add the library to your module build.gradle:
 ```
 dependencies {
-	implementation 'com.github.vitoksmile:KotDil:1.0.1'
+	implementation 'com.github.vitoksmile:KotDil:1.0.2'
 }
 ```
 

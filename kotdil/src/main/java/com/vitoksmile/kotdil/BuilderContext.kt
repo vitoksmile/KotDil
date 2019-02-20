@@ -1,5 +1,9 @@
 package com.vitoksmile.kotdil
 
+import com.vitoksmile.kotdil.Type.Factory
+import com.vitoksmile.kotdil.Type.Singleton
+
+@Suppress("UNCHECKED_CAST")
 class BuilderContext {
 
     private companion object {
@@ -8,34 +12,14 @@ class BuilderContext {
     }
 
     /**
-     * Store lazy providers to create one instance
+     * Hold providers
      */
-    private val singletonsLazy = mutableMapOf<String, Any>()
-
-    /**
-     * Store created instances
-     */
-    private val singletons = mutableMapOf<String, Any>()
-
-    /**
-     * Store providers to create instances every time
-     */
-    private val factories = mutableMapOf<String, Any>()
+    private val providers = mutableMapOf<String, Provider>()
 
     /**
      * Flag is enabled print logs to console
      */
     var isLogging: Boolean = false
-
-    /**
-     * Add provider to create one instance of T
-     *
-     * @param name Name of provider
-     * @param provider T-provider
-     */
-    fun <T : Any> singleton(name: String? = null, provider: () -> T) {
-        singletonsLazy[getKey(name, provider)] = provider
-    }
 
     /**
      * Add provider to create instance of T every time in getting
@@ -44,7 +28,31 @@ class BuilderContext {
      * @param provider T-provider
      */
     fun <T : Any> factory(name: String? = null, provider: () -> T) {
-        factories[getKey(name, provider)] = provider
+        provide(name, provider, isSingleton = false)
+    }
+
+    /**
+     * Add provider to create one instance of T
+     *
+     * @param name Name of provider
+     * @param provider T-provider
+     */
+    fun <T : Any> singleton(name: String? = null, provider: () -> T) {
+        provide(name, provider, isSingleton = true)
+    }
+
+    /**
+     * Add provider to holder
+     *
+     * @param name Name of provider
+     * @param provider T-provider
+     * @param isSingleton Is need to provide singleton instance
+     */
+    private fun <T : Any> provide(name: String? = null, provider: () -> T, isSingleton: Boolean) {
+        providers[getKey(name, provider)] = Provider(
+            provider = provider,
+            type = if (isSingleton) Singleton else Factory
+        )
     }
 
     /**
@@ -53,26 +61,15 @@ class BuilderContext {
     operator fun <T : Any> get(name: String? = null, key: String): T {
         @Suppress("NAME_SHADOWING")
         val key = getKey(name, key)
+        val provider = providers[key]
+            ?: throw IllegalArgumentException("Value with key '$key' not found. Did you added provider?")
 
-        return when {
-            // Create instance and store it to another map
-            singletonsLazy.containsKey(key) -> {
-                measureTime(key) {
-                    singletons[key] = (singletonsLazy[key] as Function0<T>)()
-                }
-                singletonsLazy.remove(key)
-                get(name, key)
+        return if (provider.isSingleton) {
+            provider.provide()
+        } else {
+            measureTime(key) {
+                provider.provide<T>()
             }
-
-            // Return created early instance
-            singletons.containsKey(key) -> singletons[key] as T
-
-            // Invoke every time provider to create instance
-            factories.containsKey(key) -> measureTime(key) {
-                (factories[key] as Function0<T>)()
-            }
-
-            else -> throw IllegalArgumentException("Value with key '$key' not found")
         }
     }
 
@@ -100,8 +97,15 @@ class BuilderContext {
 
         val start = System.currentTimeMillis()
         val value = block()
-        val name = getNameWithoutKey(key)?.let { "($it)" } ?: ""
-        println("Instance for '${getKeyWithoutName(key)}' $name was created after ${System.currentTimeMillis() - start} ms")
+
+        // logging
+        StringBuilder().apply {
+            append("Instance for '${getKeyWithoutName(key)}' ")
+            getNameWithoutKey(key)?.let { append("($it) ") }
+            append("was created after ${System.currentTimeMillis() - start} ms")
+            println(this)
+        }
+
         return value
     }
 
