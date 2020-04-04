@@ -1,1 +1,2 @@
-include ':app', ':kotdil'
+rootProject.name = 'KotDil'
+
