@@ -2,6 +2,7 @@
 The easy dependency injection framework for Kotlin developers.
 
 [![](https://jitpack.io/v/vitoksmile/KotDil.svg)](https://jitpack.io/#vitoksmile/KotDil)
+[![](https://jitci.com/gh/vitoksmile/KotDil/svg)](https://jitci.com/gh/vitoksmile/KotDil)
 
 ## Setup
 Check that you have the `JitPack` repository.
@@ -30,7 +31,7 @@ val idModule = module {
         id.getAndIncrement()
     }
 }
-val managerModule = module {
+val generatorModule = module {
     single<RandomGenerator> {
         object : RandomGenerator {
             override fun generateLong() = Random.nextLong()
@@ -47,7 +48,7 @@ val managerModule = module {
 The second, register all modules:
 ```kotlin
 startKotDil {
-    modules(idModule, managerModule)
+    modules(idModule, generatorModule)
 }
 ```
 
@@ -58,3 +59,5 @@ val user = User(injectValue(AUTO_ID), "John")
 val generator by inject<RandomGenerator>() // Lazy init
 generator.generateLong()
 ```
+
+Also you can find additional usage examples in the unit-tests [package](https://github.com/vitoksmile/KotDil/tree/master/src/test/kotlin/com/vitoksmile/kotdil)
