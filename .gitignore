@@ -2,3 +2,7 @@
 .gradle
 *.iml
 .idea/
+local.properties
+/sample/composeApp/build/
+.kotlin
+/kotlin-js-store/

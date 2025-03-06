@@ -1,0 +1,36 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <KotDil:library>
+abstract interface com.viktormykhailv.kotdil/KotDil { // com.viktormykhailv.kotdil/KotDil|null[0]
+    abstract fun <#A1: kotlin/Any?> get(kotlin/String): #A1 // com.viktormykhailv.kotdil/KotDil.get|get(kotlin.String){0§<kotlin.Any?>}[0]
+    abstract fun modules(kotlin/Array<out com.viktormykhailv.kotdil/Module>...) // com.viktormykhailv.kotdil/KotDil.modules|modules(kotlin.Array<out|com.viktormykhailv.kotdil.Module>...){}[0]
+}
+
+abstract interface com.viktormykhailv.kotdil/Module { // com.viktormykhailv.kotdil/Module|null[0]
+    abstract fun <#A1: kotlin/Any?> factory(kotlin/String, kotlin/Function1<com.viktormykhailv.kotdil/Module, #A1>) // com.viktormykhailv.kotdil/Module.factory|factory(kotlin.String;kotlin.Function1<com.viktormykhailv.kotdil.Module,0:0>){0§<kotlin.Any?>}[0]
+    abstract fun <#A1: kotlin/Any?> get(kotlin/String): #A1 // com.viktormykhailv.kotdil/Module.get|get(kotlin.String){0§<kotlin.Any?>}[0]
+    abstract fun <#A1: kotlin/Any?> single(kotlin/String, kotlin/Function1<com.viktormykhailv.kotdil/Module, #A1>) // com.viktormykhailv.kotdil/Module.single|single(kotlin.String;kotlin.Function1<com.viktormykhailv.kotdil.Module,0:0>){0§<kotlin.Any?>}[0]
+}
+
+final class com.viktormykhailv.kotdil/UnregisteredProviderException : kotlin/IllegalStateException { // com.viktormykhailv.kotdil/UnregisteredProviderException|null[0]
+    constructor <init>(kotlin/String, kotlin/Throwable? = ...) // com.viktormykhailv.kotdil/UnregisteredProviderException.<init>|<init>(kotlin.String;kotlin.Throwable?){}[0]
+}
+
+final object com.viktormykhailv.kotdil/KotDilImpl : com.viktormykhailv.kotdil/KotDil { // com.viktormykhailv.kotdil/KotDilImpl|null[0]
+    final fun <#A1: kotlin/Any?> get(kotlin/String): #A1 // com.viktormykhailv.kotdil/KotDilImpl.get|get(kotlin.String){0§<kotlin.Any?>}[0]
+    final fun modules(kotlin/Array<out com.viktormykhailv.kotdil/Module>...) // com.viktormykhailv.kotdil/KotDilImpl.modules|modules(kotlin.Array<out|com.viktormykhailv.kotdil.Module>...){}[0]
+}
+
+final fun <#A: kotlin/Any?> com.viktormykhailv.kotdil/synchronized(kotlin/Any, kotlin/Function0<#A>): #A // com.viktormykhailv.kotdil/synchronized|synchronized(kotlin.Any;kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+final fun com.viktormykhailv.kotdil/module(kotlin/Function1<com.viktormykhailv.kotdil/Module, kotlin/Unit>): com.viktormykhailv.kotdil/Module // com.viktormykhailv.kotdil/module|module(kotlin.Function1<com.viktormykhailv.kotdil.Module,kotlin.Unit>){}[0]
+final fun com.viktormykhailv.kotdil/startKotDil(kotlin/Function1<com.viktormykhailv.kotdil/KotDil, kotlin/Unit>) // com.viktormykhailv.kotdil/startKotDil|startKotDil(kotlin.Function1<com.viktormykhailv.kotdil.KotDil,kotlin.Unit>){}[0]
+final inline fun <#A: reified kotlin/Any?> (com.viktormykhailv.kotdil/Module).com.viktormykhailv.kotdil/factory(noinline kotlin/Function1<com.viktormykhailv.kotdil/Module, #A>) // com.viktormykhailv.kotdil/factory|factory@com.viktormykhailv.kotdil.Module(kotlin.Function1<com.viktormykhailv.kotdil.Module,0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (com.viktormykhailv.kotdil/Module).com.viktormykhailv.kotdil/get(): #A // com.viktormykhailv.kotdil/get|get@com.viktormykhailv.kotdil.Module(){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> (com.viktormykhailv.kotdil/Module).com.viktormykhailv.kotdil/single(noinline kotlin/Function1<com.viktormykhailv.kotdil/Module, #A>) // com.viktormykhailv.kotdil/single|single@com.viktormykhailv.kotdil.Module(kotlin.Function1<com.viktormykhailv.kotdil.Module,0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> com.viktormykhailv.kotdil/inject(kotlin/String? = ...): kotlin/Lazy<#A> // com.viktormykhailv.kotdil/inject|inject(kotlin.String?){0§<kotlin.Any?>}[0]
+final inline fun <#A: reified kotlin/Any?> com.viktormykhailv.kotdil/injectValue(kotlin/String? = ...): #A // com.viktormykhailv.kotdil/injectValue|injectValue(kotlin.String?){0§<kotlin.Any?>}[0]

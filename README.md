@@ -1,29 +1,29 @@
 # KotDil
+
 The easy dependency injection framework for Kotlin developers.
 
-[![](https://jitpack.io/v/vitoksmile/KotDil.svg)](https://jitpack.io/#vitoksmile/KotDil)
-[![](https://jitci.com/gh/vitoksmile/KotDil/svg)](https://jitci.com/gh/vitoksmile/KotDil)
+[![Maven Central](https://img.shields.io/maven-central/v/com.viktormykhailiv/kotdil)](https://central.sonatype.com/search?namespace=com.viktormykhailiv&name=kotdil)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.1.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
-## Setup
-Check that you have the `JitPack` repository.
-```
-// Add JitPack to your repositories if needed
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
+## Quick Start
+
+Add the dependency to your project:
+
+```kotlin
+repositories {
+    mavenCentral()
 }
-```
-Pick `KotDil` dependency:
-```
+
 dependencies {
-    implementation 'com.github.vitoksmile:KotDil:2.0.0'
+    implementation("com.viktormykhailiv:kotdil:$kotdil_version")
 }
 ```
 
 ## How to use KotDil?
-The first, create your own modules to provide dependencies:
+
+1. Create your own modules to provide dependencies:
+
 ```kotlin
 val idModule = module {
     val id = AtomicInteger(1)
@@ -45,14 +45,16 @@ val generatorModule = module {
 }
 ```
 
-The second, register all modules:
+2. Register all modules:
+
 ```kotlin
 startKotDil {
     modules(idModule, generatorModule)
 }
 ```
 
-The final step, invoke `inject` or `injectValue` to receive some dependency:
+3. Call `inject` or `injectValue` to get required dependency:
+
 ```kotlin
 val user = User(injectValue(AUTO_ID), "John")
 
@@ -60,4 +62,5 @@ val generator by inject<RandomGenerator>() // Lazy init
 generator.generateLong()
 ```
 
-Also you can find additional usage examples in the unit-tests [package](https://github.com/vitoksmile/KotDil/tree/master/src/test/kotlin/com/vitoksmile/kotdil)
+Also you can find additional usage examples in the
+unit-tests [package](https://github.com/vitoksmile/KotDil/tree/main/library/src/commonTest/kotlin/com/viktormykhailiv/kotlin/KotDilTest.kt)
